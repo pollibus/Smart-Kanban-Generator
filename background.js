@@ -139,21 +139,80 @@ Wichtig:
 }
 
 /**
+ * Clean URL by removing tracking parameters
+ * Fallback for when LLM doesn't clean the URL
+ */
+function cleanUrl(url) {
+  if (!url) return '';
+
+  try {
+    const urlObj = new URL(url);
+
+    // List of tracking parameters to remove
+    const trackingParams = [
+      // UTM parameters
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id',
+      // Referrer tracking
+      'ref', 'ref_', 'referrer', 'source',
+      // Affiliate tracking
+      'tag', 'aff', 'affiliate', 'affid', 'aff_id',
+      // Click IDs
+      'fbclid', 'gclid', 'msclkid', 'mc_cid', 'mc_eid',
+      // Analytics
+      '_ga', '_gid', '_gac', '_gl',
+      // eBay tracking
+      '_trkparms', '_trksid', 'amclksrc', 'aid', 'algo', 'ao', 'asc', 'meid', 'pid',
+      'rk', 'rkt', 'pmt', 'noa', 'pg', 'algv', 'mkevt', 'mkcid', 'mkrid',
+      // Amazon tracking
+      'keywords', 'qid', 'sprefix', 'sr', 'th', 'psc',
+      // Generic
+      'campaign_id', 'ad_id', 'adgroup_id', 'placement'
+    ];
+
+    // Remove all tracking parameters
+    trackingParams.forEach(param => {
+      urlObj.searchParams.delete(param);
+    });
+
+    // If no parameters left, remove the ? entirely
+    let cleanedUrl = urlObj.toString();
+    if (urlObj.search === '?') {
+      cleanedUrl = cleanedUrl.replace('?', '');
+    }
+
+    return cleanedUrl;
+  } catch (e) {
+    // If URL parsing fails, return original
+    console.warn('URL cleaning failed:', e);
+    return url;
+  }
+}
+
+/**
  * Validate and clean OpenAI response
  * Ensures all required fields exist and adds fallbacks
  */
 function validateAndCleanResponse(normalized, rawData) {
+  // Clean the product URL (either from LLM or from raw data)
+  const productUrl = normalized.product_url || rawData.product_url || '';
+  const cleanedUrl = cleanUrl(productUrl);
+
   const cleaned = {
     title_short: normalized.title_short || rawData.title || '',
     price: normalized.price || rawData.price || '',
     quantity_unit: normalized.quantity_unit || rawData.quantity || '',
     supplier: normalized.supplier || rawData.supplier || '',
     image_url: normalized.image_url || rawData.image_url || '',
-    product_url: normalized.product_url || rawData.product_url || '',
+    product_url: cleanedUrl, // Always use cleaned URL
     reorder_level: normalized.reorder_level || '1 Packung',
     order_quantity: normalized.order_quantity || '1 Packung',
     notes: normalized.notes || ''
   };
+
+  console.log('[Smart Kanban] URL cleaning:', {
+    original: productUrl,
+    cleaned: cleanedUrl
+  });
 
   return cleaned;
 }
