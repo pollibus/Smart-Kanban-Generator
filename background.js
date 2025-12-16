@@ -31,15 +31,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
  * @returns {Promise<Object>} - Normalized product data
  */
 async function normalizeWithOpenAI(rawData) {
-  // Get API key from storage
-  const { openaiApiKey } = await chrome.storage.sync.get(['openaiApiKey']);
+  // Get API key and custom instructions from storage
+  const { openaiApiKey, customInstructions } = await chrome.storage.sync.get(['openaiApiKey', 'customInstructions']);
 
   if (!openaiApiKey) {
     throw new Error('OpenAI API Key nicht konfiguriert. Bitte in den Einstellungen hinterlegen.');
   }
 
   // Build prompt for OpenAI
-  const prompt = buildNormalizationPrompt(rawData);
+  const prompt = buildNormalizationPrompt(rawData, customInstructions);
 
   // Call OpenAI API
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -57,7 +57,7 @@ async function normalizeWithOpenAI(rawData) {
 
 Deine Aufgabe:
 - Extrahiere und normalisiere Produktinformationen aus den gegebenen Rohdaten
-- Erstelle einen kurzen, prägnanten Titel (z.B. "Miele Spülmittel-Tabs, 16 Stück, 14,99 €")
+- Erstelle einen kurzen, prägnanten Titel OHNE Preis (z.B. "Miele Spülmittel-Tabs, 16 Stück")
 - Normalisiere Preise im Format "XX.XX €"
 - Normalisiere Mengen (z.B. "500g", "1L", "16 Stück")
 - Schlage sinnvolle Werte für Sicherheitsbestand (reorder_level) und Bestellmenge (order_quantity) vor
@@ -103,8 +103,45 @@ Antworte AUSSCHLIESSLICH mit einem JSON-Objekt. Kein zusätzlicher Text.`
 
 /**
  * Build normalization prompt from raw data
+ * @param {Object} rawData - Raw product data
+ * @param {string} customInstructions - User's custom instructions
  */
-function buildNormalizationPrompt(rawData) {
+function buildNormalizationPrompt(rawData, customInstructions = '') {
+  // Extract domain from URL
+  const domain = rawData.domain || '';
+
+  // Parse custom instructions for domain-specific rules
+  let relevantInstructions = '';
+  if (customInstructions) {
+    const lines = customInstructions.split('\n');
+    const generalInstructions = [];
+    const domainInstructions = [];
+
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      if (!trimmed) return;
+
+      // Check if line starts with a domain pattern
+      const domainMatch = trimmed.match(/^([a-z0-9.-]+):\s*(.+)/i);
+      if (domainMatch) {
+        const [, pattern, instruction] = domainMatch;
+        // If current domain matches the pattern
+        if (domain.includes(pattern)) {
+          domainInstructions.push(instruction);
+        }
+      } else {
+        // General instruction (no domain prefix)
+        generalInstructions.push(trimmed);
+      }
+    });
+
+    // Combine general and domain-specific instructions
+    const allInstructions = [...generalInstructions, ...domainInstructions];
+    if (allInstructions.length > 0) {
+      relevantInstructions = '\n\nBenutzerdefinierte Anweisungen:\n' + allInstructions.map(i => `- ${i}`).join('\n');
+    }
+  }
+
   return `Normalisiere folgende Produktdaten zu einer Kanban-Karte:
 
 Rohdaten:
@@ -130,11 +167,11 @@ Erwartetes JSON-Schema:
 }
 
 Wichtig:
-- title_short: Kombiniere Marke, Produkt und Menge sinnvoll (z.B. "Ariel Waschmittel Color, 100 Waschgänge, 29,99 €")
+- title_short: Kombiniere Marke, Produkt und Menge OHNE Preis (z.B. "Ariel Waschmittel Color, 100 Waschgänge")
 - Bei unklaren Daten: Feld leer lassen ("")
 - reorder_level und order_quantity: Verwende als Standard "1 Packung", wenn nichts anderes sinnvoll ist
 - product_url: Entferne Tracking-Parameter für kompakteren QR-Code
-- image_url: Unverändert übernehmen
+- image_url: Unverändert übernehmen${relevantInstructions}
 `;
 }
 

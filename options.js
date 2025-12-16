@@ -3,6 +3,7 @@
 
 const form = document.getElementById('settingsForm');
 const apiKeyInput = document.getElementById('apiKey');
+const customInstructionsInput = document.getElementById('customInstructions');
 const languageSelect = document.getElementById('language');
 const toggleBtn = document.getElementById('toggleApiKey');
 const testBtn = document.getElementById('testBtn');
@@ -18,9 +19,12 @@ const statusMessage = document.getElementById('statusMessage');
 
 // Load saved settings
 function loadSettings() {
-  chrome.storage.sync.get(['openaiApiKey', 'language'], (result) => {
+  chrome.storage.sync.get(['openaiApiKey', 'customInstructions', 'language'], (result) => {
     if (result.openaiApiKey) {
       apiKeyInput.value = result.openaiApiKey;
+    }
+    if (result.customInstructions) {
+      customInstructionsInput.value = result.customInstructions;
     }
     if (result.language) {
       languageSelect.value = result.language;
@@ -80,6 +84,7 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const apiKey = apiKeyInput.value.trim();
+  const customInstructions = customInstructionsInput.value.trim();
 
   if (!apiKey) {
     showStatus(t('options.messages.emptyKey'), 'error');
@@ -93,7 +98,10 @@ form.addEventListener('submit', (e) => {
   }
 
   // Save to storage
-  chrome.storage.sync.set({ openaiApiKey: apiKey }, () => {
+  chrome.storage.sync.set({
+    openaiApiKey: apiKey,
+    customInstructions: customInstructions
+  }, () => {
     showStatus(t('options.messages.saved'), 'success');
 
     // Auto-hide success message after 3 seconds
