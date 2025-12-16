@@ -27,7 +27,7 @@
       "supplierPlaceholder": "e.g. Miele",
       "urlLabel": "Product URL",
       "urlPlaceholder": "https://...",
-      "urlHint": "URL for QR code (automatically shortened, can be manually adjusted)",
+      "urlHint": "URL for QR code (tracking parameters automatically removed, can be manually adjusted)",
       "reorderLabel": "Safety Stock",
       "reorderPlaceholder": "1 package",
       "orderLabel": "Order Quantity",

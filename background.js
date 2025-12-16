@@ -62,6 +62,11 @@ Deine Aufgabe:
 - Normalisiere Mengen (z.B. "500g", "1L", "16 Stück")
 - Schlage sinnvolle Werte für Sicherheitsbestand (reorder_level) und Bestellmenge (order_quantity) vor
 - Standard-Regel: 1 Packung Sicherheitsbestand, 1 Packung Bestellmenge
+- Kürze die Produkt-URL intelligent:
+  * Entferne Tracking-Parameter (utm_*, ref, tag, fbclid, gclid, mc_*, _ga, etc.)
+  * Behalte nur essenzielle Parameter für Produktidentifikation
+  * Beispiel: amazon.de/dp/B0ABCDEF?tag=xyz&ref=123 → amazon.de/dp/B0ABCDEF
+  * Bei Unsicherheit: Entferne alles nach "?"
 - Lasse Felder leer, wenn Daten nicht eindeutig extrahierbar sind
 
 Antworte AUSSCHLIESSLICH mit einem JSON-Objekt. Kein zusätzlicher Text.`
@@ -118,7 +123,7 @@ Erwartetes JSON-Schema:
   "quantity_unit": "Normalisierte Mengenangabe (z.B. '500g', '1L', '16 Stück')",
   "supplier": "Hersteller/Marke",
   "image_url": "Original Bild-URL (unverändert übernehmen)",
-  "product_url": "Original Produkt-URL (unverändert übernehmen)",
+  "product_url": "GEKÜRZTE Produkt-URL ohne Tracking-Parameter",
   "reorder_level": "Sicherheitsbestand als Text (z.B. '1 Packung', '2 Stück')",
   "order_quantity": "Bestellmenge als Text (z.B. '1 Packung', '3 Stück')",
   "notes": "Optionale Notizen oder leerer String"
@@ -128,7 +133,8 @@ Wichtig:
 - title_short: Kombiniere Marke, Produkt und Menge sinnvoll (z.B. "Ariel Waschmittel Color, 100 Waschgänge, 29,99 €")
 - Bei unklaren Daten: Feld leer lassen ("")
 - reorder_level und order_quantity: Verwende als Standard "1 Packung", wenn nichts anderes sinnvoll ist
-- Alle URLs unverändert übernehmen
+- product_url: Entferne Tracking-Parameter für kompakteren QR-Code
+- image_url: Unverändert übernehmen
 `;
 }
 
