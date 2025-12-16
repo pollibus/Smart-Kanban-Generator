@@ -28,6 +28,7 @@
       "urlLabel": "Product URL",
       "urlPlaceholder": "https://...",
       "urlHint": "URL for QR code (will try to shorten automatically, please check and adjust if needed)",
+      "urlWarning": "URL seems a bit long. Try shortening it to get an easier-to-scan QR code.",
       "reorderLabel": "Safety Stock",
       "reorderPlaceholder": "1 package",
       "orderLabel": "Order Quantity",

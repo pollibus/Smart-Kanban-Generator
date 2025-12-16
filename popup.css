@@ -231,6 +231,30 @@ input.url-too-long:focus {
   box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
 }
 
+/* URL warning message */
+.url-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 8px 10px;
+  background-color: #fef3c7;
+  border-left: 3px solid #f59e0b;
+  border-radius: 4px;
+  color: #92400e;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.url-warning.hidden {
+  display: none;
+}
+
+.url-warning svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
 textarea {
   resize: vertical;
 }

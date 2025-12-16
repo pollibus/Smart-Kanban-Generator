@@ -320,10 +320,17 @@ function updatePreview() {
 function checkUrlLength() {
   const url = form.productUrl.value;
   const MAX_RECOMMENDED_LENGTH = 50;
+  const warningElement = document.getElementById('urlLengthWarning');
 
   if (url.length > MAX_RECOMMENDED_LENGTH) {
     form.productUrl.classList.add('url-too-long');
+    if (warningElement) {
+      warningElement.classList.remove('hidden');
+    }
   } else {
     form.productUrl.classList.remove('url-too-long');
+    if (warningElement) {
+      warningElement.classList.add('hidden');
+    }
   }
 }
