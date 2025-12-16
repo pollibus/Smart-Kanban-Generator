@@ -53,6 +53,9 @@ form.element.addEventListener('submit', handlePrint);
 // Image preview updates
 form.titleShort.addEventListener('input', updatePreview);
 
+// URL length check
+form.productUrl.addEventListener('input', checkUrlLength);
+
 // Initialize
 init();
 
@@ -207,6 +210,9 @@ function populateForm(data) {
   form.orderQuantity.value = data.order_quantity || '1 Packung';
   form.notes.value = data.notes || '';
 
+  // Check URL length and highlight if needed
+  checkUrlLength();
+
   // Populate image gallery
   populateImageGallery(data.raw?.images || [], data.image_url);
 }
@@ -306,4 +312,18 @@ function showError(message) {
  */
 function updatePreview() {
   // Could show live preview of card layout here
+}
+
+/**
+ * Check URL length and highlight if too long
+ */
+function checkUrlLength() {
+  const url = form.productUrl.value;
+  const MAX_RECOMMENDED_LENGTH = 50;
+
+  if (url.length > MAX_RECOMMENDED_LENGTH) {
+    form.productUrl.classList.add('url-too-long');
+  } else {
+    form.productUrl.classList.remove('url-too-long');
+  }
 }

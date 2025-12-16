@@ -219,6 +219,18 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+/* Highlight long URLs */
+input.url-too-long {
+  background-color: #fef3c7;
+  border-color: #f59e0b;
+}
+
+input.url-too-long:focus {
+  background-color: #fef3c7;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
 textarea {
   resize: vertical;
 }

@@ -27,7 +27,7 @@
       "supplierPlaceholder": "z.B. Miele",
       "urlLabel": "Produkt-URL",
       "urlPlaceholder": "https://...",
-      "urlHint": "URL für QR-Code (Tracking-Parameter werden automatisch entfernt, kann manuell angepasst werden)",
+      "urlHint": "URL für QR-Code (wird versucht automatisch zu kürzen, bitte prüfen und bei Bedarf anpassen)",
       "reorderLabel": "Sicherheitsbestand",
       "reorderPlaceholder": "1 Packung",
       "orderLabel": "Bestellmenge",
