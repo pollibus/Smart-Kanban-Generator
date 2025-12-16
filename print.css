@@ -1,0 +1,449 @@
+@page {
+  size: A4;
+  margin: 10mm;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f0f0f0;
+  padding: 20px;
+}
+
+/* Controls (hidden when printing) */
+.no-print {
+  display: block;
+}
+
+@media print {
+  body {
+    background: white;
+    padding: 0;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+.controls {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-primary, .btn-secondary {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: #667eea;
+  color: white;
+}
+
+.btn-secondary {
+  background: white;
+  color: #4a5568;
+  border: 1px solid #cbd5e0;
+}
+
+.hint {
+  margin-left: auto;
+  font-size: 13px;
+  color: #718096;
+  font-style: italic;
+}
+
+/* Print Container */
+.print-container {
+  background: white;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 10mm;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 5mm;
+}
+
+@media print {
+  .print-container {
+    width: 100%;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    gap: 3mm;
+  }
+}
+
+/* Base Kanban Card Styles */
+.kanban-card {
+  border: 2px solid #2d3748;
+  background: white;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Small Cards: 105 x 74 mm */
+.card-small {
+  width: 105mm;
+  height: 74mm;
+  padding: 4mm;
+  flex-shrink: 0;
+}
+
+.card-small .card-header {
+  display: flex;
+  gap: 2mm;
+  border-bottom: 1px solid #cbd5e0;
+  padding-bottom: 2mm;
+  margin-bottom: 2mm;
+}
+
+.card-small .card-title {
+  flex: 1;
+  font-size: 11pt;
+  font-weight: bold;
+  line-height: 1.3;
+  max-height: 15mm;
+  overflow: hidden;
+}
+
+.card-small .card-image {
+  width: 15mm;
+  height: 15mm;
+  border: 1px solid #cbd5e0;
+  flex-shrink: 0;
+  object-fit: contain;
+  object-position: center;
+}
+
+.card-small .card-body {
+  display: flex;
+  gap: 3mm;
+  margin-bottom: 2mm;
+}
+
+.card-small .card-info {
+  flex: 1;
+  font-size: 9pt;
+}
+
+.card-small .info-row {
+  display: flex;
+  margin-bottom: 1mm;
+}
+
+.card-small .label {
+  font-weight: bold;
+  margin-right: 2mm;
+  min-width: 15mm;
+}
+
+.card-small .card-qr {
+  width: 20mm;
+  height: 20mm;
+  flex-shrink: 0;
+}
+
+.card-small .card-footer {
+  display: flex;
+  gap: 4mm;
+  padding-top: 2mm;
+  border-top: 1px solid #e2e8f0;
+  font-size: 8pt;
+}
+
+.card-small .footer-label {
+  font-weight: bold;
+  margin-right: 1mm;
+}
+
+/* Medium Cards: 148 x 105 mm */
+.card-medium {
+  width: 148mm;
+  height: 105mm;
+  padding: 5mm;
+  flex-shrink: 0;
+}
+
+.card-medium .card-header {
+  display: flex;
+  gap: 4mm;
+  border-bottom: 2px solid #2d3748;
+  padding-bottom: 3mm;
+  margin-bottom: 3mm;
+}
+
+.card-medium .card-title {
+  flex: 1;
+  font-size: 14pt;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.card-medium .card-image {
+  width: 25mm;
+  height: 25mm;
+  border: 1px solid #cbd5e0;
+  flex-shrink: 0;
+  object-fit: contain;
+  object-position: center;
+}
+
+.card-medium .card-body {
+  display: flex;
+  gap: 4mm;
+}
+
+.card-medium .card-info {
+  flex: 1;
+  font-size: 10pt;
+}
+
+.card-medium .info-row {
+  display: flex;
+  margin-bottom: 2mm;
+}
+
+.card-medium .label {
+  font-weight: bold;
+  margin-right: 3mm;
+  min-width: 30mm;
+}
+
+.card-medium .card-qr {
+  width: 25mm;
+  height: 25mm;
+}
+
+.card-medium .card-footer {
+  margin-top: 3mm;
+  padding-top: 3mm;
+  border-top: 1px solid #cbd5e0;
+  font-size: 9pt;
+}
+
+/* Large Cards: 210 x 148 mm */
+.card-large {
+  width: 190mm; /* Fit within A4 margins */
+  height: 120mm; /* Reduced to fit with other cards */
+  padding: 5mm;
+  flex-shrink: 0;
+}
+
+.card-large .card-header {
+  display: flex;
+  gap: 5mm;
+  border-bottom: 3px solid #2d3748;
+  padding-bottom: 4mm;
+  margin-bottom: 5mm;
+}
+
+.card-large .header-content {
+  flex: 1;
+}
+
+.card-large .card-title {
+  font-size: 18pt;
+  font-weight: bold;
+  margin-bottom: 3mm;
+  line-height: 1.3;
+}
+
+.card-large .card-meta {
+  display: flex;
+  gap: 8mm;
+  font-size: 12pt;
+}
+
+.card-large .meta-item {
+  display: flex;
+  gap: 2mm;
+}
+
+.card-large .meta-item .label {
+  font-weight: bold;
+}
+
+.card-large .card-image {
+  width: 40mm;
+  height: 40mm;
+  border: 1px solid #cbd5e0;
+  object-fit: contain;
+  object-position: center;
+}
+
+.card-large .card-info-large {
+  display: flex;
+  gap: 6mm;
+  margin-bottom: 5mm;
+}
+
+.card-large .info-column {
+  flex: 1;
+  font-size: 11pt;
+}
+
+.card-large .info-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3mm;
+}
+
+.card-large .info-group .label {
+  font-weight: bold;
+  font-size: 9pt;
+  color: #718096;
+  margin-bottom: 1mm;
+}
+
+.card-large .card-qr {
+  width: 35mm;
+  height: 35mm;
+}
+
+.card-large .notes-section {
+  border-top: 1px solid #cbd5e0;
+  padding-top: 3mm;
+  font-size: 10pt;
+}
+
+.card-large .notes-section .label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 2mm;
+}
+
+/* A4 Cards: 210 x 297 mm (1 per page) */
+.card-a4 {
+  width: 210mm;
+  height: 297mm;
+  padding: 15mm;
+  page-break-after: always;
+}
+
+.card-a4 .card-header-a4 {
+  display: flex;
+  gap: 10mm;
+  border-bottom: 4px solid #2d3748;
+  padding-bottom: 8mm;
+  margin-bottom: 10mm;
+}
+
+.card-a4 .header-left {
+  flex: 1;
+}
+
+.card-a4 .card-title {
+  font-size: 24pt;
+  font-weight: bold;
+  margin-bottom: 6mm;
+  line-height: 1.3;
+}
+
+.card-a4 .card-meta-a4 {
+  font-size: 14pt;
+}
+
+.card-a4 .meta-row {
+  display: flex;
+  gap: 4mm;
+  margin-bottom: 3mm;
+}
+
+.card-a4 .meta-row .label {
+  font-weight: bold;
+  min-width: 40mm;
+}
+
+.card-a4 .card-image-a4 {
+  width: 60mm;
+  height: 60mm;
+  border: 2px solid #cbd5e0;
+  object-fit: contain;
+  object-position: center;
+}
+
+.card-a4 .inventory-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10mm;
+  margin-bottom: 10mm;
+  padding: 8mm;
+  background: #f7fafc;
+  border: 2px solid #cbd5e0;
+  border-radius: 4mm;
+}
+
+.card-a4 .inventory-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+}
+
+.card-a4 .inventory-item .label {
+  font-weight: bold;
+  font-size: 12pt;
+  color: #4a5568;
+}
+
+.card-a4 .inventory-item .value {
+  font-size: 16pt;
+  color: #2d3748;
+}
+
+.card-a4 .notes-section-a4 {
+  margin-bottom: 10mm;
+  padding: 6mm;
+  border: 1px solid #cbd5e0;
+  border-radius: 4mm;
+  min-height: 40mm;
+  font-size: 12pt;
+}
+
+.card-a4 .notes-section-a4 .label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 3mm;
+}
+
+.card-a4 .qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3mm;
+  padding: 6mm;
+  border: 2px dashed #cbd5e0;
+  background: #f7fafc;
+}
+
+.card-a4 .card-qr {
+  width: 50mm;
+  height: 50mm;
+}
+
+.card-a4 .qr-label {
+  font-size: 11pt;
+  color: #718096;
+  font-style: italic;
+}

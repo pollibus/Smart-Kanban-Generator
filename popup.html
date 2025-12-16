@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="popup.title">Smart Kanban Generator</title>
+  <link rel="stylesheet" href="popup.css">
+  <script src="i18n.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1 data-i18n="popup.title">Smart Kanban Generator</h1>
+      <button id="settingsBtn" class="icon-btn" title="Settings">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319z"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Initial State: Extract Button -->
+    <div id="initialState" class="state">
+      <div class="info-box">
+        <p data-i18n="popup.initialState.info">Open a product detail page and click 'Analyze' to create a Kanban card.</p>
+      </div>
+      <button id="extractBtn" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+          <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+        </svg>
+        <span data-i18n="popup.initialState.analyzeBtn">Analyze Product Data</span>
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="state hidden">
+      <div class="loader"></div>
+      <p data-i18n="popup.loadingState.analyzing">Analyzing product data...</p>
+      <small class="text-muted" data-i18n="popup.loadingState.hint">This may take a few seconds</small>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="state hidden">
+      <div class="error-box">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+        </svg>
+        <div id="errorMessage"></div>
+      </div>
+      <button id="retryBtn" class="btn-secondary" data-i18n="popup.errorState.retryBtn">Try Again</button>
+    </div>
+
+    <!-- Edit State: Show extracted/normalized data -->
+    <div id="editState" class="state hidden">
+      <div id="cacheInfo" class="cache-info hidden">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </svg>
+        <span data-i18n="popup.editState.cacheInfo">Cached data loaded – Click 'Refresh' for fresh data</span>
+      </div>
+      <form id="productForm">
+        <div class="form-group">
+          <label for="titleShort" data-i18n="popup.editState.titleLabel">Title (Kanban Card)</label>
+          <input type="text" id="titleShort" maxlength="60" required>
+          <small class="text-muted" data-i18n="popup.editState.titleHint">Max. 60 characters, appears on card</small>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="price" data-i18n="popup.editState.priceLabel">Price</label>
+            <input type="text" id="price" data-i18n-placeholder="popup.editState.pricePlaceholder" placeholder="14.99 €">
+          </div>
+          <div class="form-group">
+            <label for="quantityUnit" data-i18n="popup.editState.quantityLabel">Quantity/Unit</label>
+            <input type="text" id="quantityUnit" data-i18n-placeholder="popup.editState.quantityPlaceholder" placeholder="16 pieces">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="supplier" data-i18n="popup.editState.supplierLabel">Manufacturer/Brand</label>
+          <input type="text" id="supplier" data-i18n-placeholder="popup.editState.supplierPlaceholder" placeholder="e.g. Miele">
+        </div>
+
+        <div class="form-group">
+          <label for="productUrl" data-i18n="popup.editState.urlLabel">Product URL</label>
+          <input type="text" id="productUrl" placeholder="https://...">
+          <small class="text-muted" data-i18n="popup.editState.urlHint">URL for QR code (automatically shortened, can be manually adjusted)</small>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reorderLevel" data-i18n="popup.editState.reorderLabel">Safety Stock</label>
+            <input type="text" id="reorderLevel" data-i18n-placeholder="popup.editState.reorderPlaceholder" placeholder="1 package">
+          </div>
+          <div class="form-group">
+            <label for="orderQuantity" data-i18n="popup.editState.orderLabel">Order Quantity</label>
+            <input type="text" id="orderQuantity" data-i18n-placeholder="popup.editState.orderPlaceholder" placeholder="1 package">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="notes" data-i18n="popup.editState.notesLabel">Notes (optional)</label>
+          <textarea id="notes" rows="2" data-i18n-placeholder="popup.editState.notesPlaceholder" placeholder="Additional information..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="cancelBtn" class="btn-secondary" data-i18n="popup.editState.cancelBtn">Cancel</button>
+          <button type="button" id="refreshBtn" class="btn-secondary" data-i18n-title="popup.editState.refreshTitle" title="Reload data from page">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+            </svg>
+            <span data-i18n="popup.editState.refreshBtn">Refresh</span>
+          </button>
+          <button type="submit" id="printBtn" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+              <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
+            </svg>
+            <span data-i18n="popup.editState.printBtn">Open Print View</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Image Selection -->
+      <div class="image-selection-section">
+        <h3 data-i18n="popup.editState.imageSelection.title">Select Product Image</h3>
+        <div id="imageGallery" class="image-gallery">
+          <p class="text-muted" data-i18n="popup.editState.imageSelection.loading">Images will be loaded after analysis...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

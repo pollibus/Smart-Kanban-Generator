@@ -1,0 +1,99 @@
+{
+  "extensionName": "Smart Kanban Generator",
+  "extensionDescription": "Automatische Generierung druckbarer Kanban-Karten aus Produktseiten",
+
+  "popup": {
+    "title": "Smart Kanban Generator",
+    "initialState": {
+      "info": "Öffne eine Produktdetailseite und klicke auf 'Analysieren', um eine Kanban-Karte zu erstellen.",
+      "analyzeBtn": "Produktdaten analysieren"
+    },
+    "loadingState": {
+      "analyzing": "Analysiere Produktdaten...",
+      "hint": "Dies kann einige Sekunden dauern"
+    },
+    "errorState": {
+      "retryBtn": "Erneut versuchen"
+    },
+    "editState": {
+      "cacheInfo": "Gecachte Daten geladen – Klicke 'Aktualisieren' für frische Daten",
+      "titleLabel": "Titel (Kanban-Karte)",
+      "titleHint": "Max. 60 Zeichen, erscheint auf der Karte",
+      "priceLabel": "Preis",
+      "pricePlaceholder": "14,99 €",
+      "quantityLabel": "Menge/Einheit",
+      "quantityPlaceholder": "16 Stück",
+      "supplierLabel": "Hersteller/Marke",
+      "supplierPlaceholder": "z.B. Miele",
+      "urlLabel": "Produkt-URL",
+      "urlPlaceholder": "https://...",
+      "urlHint": "URL für QR-Code (wird automatisch gekürzt, kann manuell angepasst werden)",
+      "reorderLabel": "Sicherheitsbestand",
+      "reorderPlaceholder": "1 Packung",
+      "orderLabel": "Bestellmenge",
+      "orderPlaceholder": "1 Packung",
+      "notesLabel": "Notizen (optional)",
+      "notesPlaceholder": "Zusätzliche Informationen...",
+      "cancelBtn": "Abbrechen",
+      "refreshBtn": "Aktualisieren",
+      "refreshTitle": "Daten neu von der Seite laden",
+      "printBtn": "Druckansicht öffnen",
+      "imageSelection": {
+        "title": "Produktbild auswählen",
+        "loading": "Bilder werden nach der Analyse geladen...",
+        "noImages": "Keine Bilder gefunden"
+      }
+    }
+  },
+
+  "options": {
+    "title": "Einstellungen - Smart Kanban Generator",
+    "heading": "Einstellungen",
+    "apiKeyLabel": "OpenAI API-Schlüssel",
+    "apiKeyPlaceholder": "sk-...",
+    "apiKeyHint": "Erforderlich für die Datennormalisierung. Dein Schlüssel wird lokal gespeichert und nur an OpenAI gesendet.",
+    "getKeyLink": "API-Schlüssel erhalten",
+    "testBtn": "Verbindung testen",
+    "saveBtn": "Speichern",
+    "languageLabel": "Sprache",
+    "languageHint": "Wähle deine bevorzugte Sprache",
+    "privacy": {
+      "title": "Datenschutz & Datennutzung",
+      "apiKeyInfo": "Dein OpenAI API-Schlüssel wird lokal in deinem Browser gespeichert und niemals an Dritte weitergegeben.",
+      "dataProcessing": "Produktdaten werden zur Normalisierung an OpenAI gesendet. Es werden keine personenbezogenen Daten erfasst oder gespeichert.",
+      "caching": "Extrahierte Daten werden lokal für 24 Stunden gecacht, um redundante API-Aufrufe zu vermeiden."
+    },
+    "messages": {
+      "saved": "Einstellungen gespeichert!",
+      "testSuccess": "Verbindung erfolgreich! API-Schlüssel ist gültig.",
+      "testError": "Verbindung fehlgeschlagen: {{error}}",
+      "saveError": "Fehler beim Speichern: {{error}}",
+      "emptyKey": "Bitte gib zuerst einen API-Schlüssel ein."
+    }
+  },
+
+  "print": {
+    "printBtn": "Drucken",
+    "closeBtn": "Schließen",
+    "hint": "Tipp: Wähle im Druckdialog '100% Skalierung' für beste Ergebnisse",
+    "cardLabels": {
+      "price": "Preis:",
+      "quantity": "Menge:",
+      "supplier": "Lieferant:",
+      "min": "Min:",
+      "order": "Bestell:",
+      "safetyStock": "Sicherheitsbestand:",
+      "orderQuantity": "Bestellmenge:",
+      "notes": "Notizen:",
+      "qrCode": "QR-Code für Produktseite"
+    }
+  },
+
+  "errors": {
+    "noTab": "Kein aktiver Tab gefunden",
+    "invalidPage": "Diese Extension funktioniert nicht auf Chrome-internen Seiten. Bitte öffne eine Produktseite.",
+    "extractionFailed": "Konnte keine Produktdaten extrahieren. Stelle sicher, dass du auf einer Produktdetailseite bist.",
+    "normalizationFailed": "Fehler bei der Datenverarbeitung",
+    "apiKeyMissing": "OpenAI API-Schlüssel nicht konfiguriert. Bitte gehe zu den Extension-Einstellungen."
+  }
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="options.title">Settings - Smart Kanban Generator</title>
+  <link rel="stylesheet" href="options.css">
+  <script src="i18n.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1 data-i18n="extensionName">Smart Kanban Generator</h1>
+      <p class="subtitle" data-i18n="options.heading">Settings</p>
+    </header>
+
+    <main>
+      <section class="settings-section">
+        <form id="settingsForm">
+          <div class="form-group">
+            <label for="language" data-i18n="options.languageLabel">Language</label>
+            <select id="language" class="form-select">
+              <option value="en">English</option>
+              <option value="de">Deutsch</option>
+            </select>
+            <small class="help-text" data-i18n="options.languageHint">Select your preferred language</small>
+          </div>
+
+          <div class="form-group">
+            <label for="apiKey" data-i18n="options.apiKeyLabel">OpenAI API Key</label>
+            <div class="input-group">
+              <input
+                type="password"
+                id="apiKey"
+                data-i18n-placeholder="options.apiKeyPlaceholder"
+                placeholder="sk-proj-..."
+                autocomplete="off"
+                spellcheck="false"
+              >
+              <button type="button" id="toggleApiKey" class="btn-icon" title="Show/Hide">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                </svg>
+              </button>
+            </div>
+            <small class="help-text">
+              <span data-i18n="options.apiKeyHint">Required for data normalization. Your key is stored locally and only sent to OpenAI.</span>
+              <a href="https://platform.openai.com/api-keys" target="_blank" data-i18n="options.getKeyLink">Get API Key</a>
+            </small>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="testBtn" class="btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+              </svg>
+              <span data-i18n="options.testBtn">Test Connection</span>
+            </button>
+            <button type="submit" id="saveBtn" class="btn-primary">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+              </svg>
+              <span data-i18n="options.saveBtn">Save</span>
+            </button>
+          </div>
+        </form>
+
+        <div id="statusMessage" class="status-message hidden"></div>
+      </section>
+
+      <section class="info-section">
+        <h2 data-i18n="options.privacy.title">Privacy & Data Usage</h2>
+        <div class="info-box">
+          <ul>
+            <li data-i18n="options.privacy.apiKeyInfo">Your OpenAI API key is stored locally in your browser and is never sent to third parties.</li>
+            <li data-i18n="options.privacy.dataProcessing">Product data is sent to OpenAI for normalization. No personal data is collected or stored.</li>
+            <li data-i18n="options.privacy.caching">Extracted data is cached locally for 24 hours to avoid redundant API calls.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

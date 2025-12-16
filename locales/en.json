@@ -1,0 +1,99 @@
+{
+  "extensionName": "Smart Kanban Generator",
+  "extensionDescription": "Automatically generate printable Kanban cards from product pages",
+
+  "popup": {
+    "title": "Smart Kanban Generator",
+    "initialState": {
+      "info": "Open a product detail page and click 'Analyze' to create a Kanban card.",
+      "analyzeBtn": "Analyze Product Data"
+    },
+    "loadingState": {
+      "analyzing": "Analyzing product data...",
+      "hint": "This may take a few seconds"
+    },
+    "errorState": {
+      "retryBtn": "Try Again"
+    },
+    "editState": {
+      "cacheInfo": "Cached data loaded – Click 'Refresh' for fresh data",
+      "titleLabel": "Title (Kanban Card)",
+      "titleHint": "Max. 60 characters, appears on card",
+      "priceLabel": "Price",
+      "pricePlaceholder": "14.99 €",
+      "quantityLabel": "Quantity/Unit",
+      "quantityPlaceholder": "16 pieces",
+      "supplierLabel": "Manufacturer/Brand",
+      "supplierPlaceholder": "e.g. Miele",
+      "urlLabel": "Product URL",
+      "urlPlaceholder": "https://...",
+      "urlHint": "URL for QR code (automatically shortened, can be manually adjusted)",
+      "reorderLabel": "Safety Stock",
+      "reorderPlaceholder": "1 package",
+      "orderLabel": "Order Quantity",
+      "orderPlaceholder": "1 package",
+      "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "Additional information...",
+      "cancelBtn": "Cancel",
+      "refreshBtn": "Refresh",
+      "refreshTitle": "Reload data from page",
+      "printBtn": "Open Print View",
+      "imageSelection": {
+        "title": "Select Product Image",
+        "loading": "Images will be loaded after analysis...",
+        "noImages": "No images found"
+      }
+    }
+  },
+
+  "options": {
+    "title": "Settings - Smart Kanban Generator",
+    "heading": "Settings",
+    "apiKeyLabel": "OpenAI API Key",
+    "apiKeyPlaceholder": "sk-...",
+    "apiKeyHint": "Required for data normalization. Your key is stored locally and only sent to OpenAI.",
+    "getKeyLink": "Get API Key",
+    "testBtn": "Test Connection",
+    "saveBtn": "Save",
+    "languageLabel": "Language",
+    "languageHint": "Select your preferred language",
+    "privacy": {
+      "title": "Privacy & Data Usage",
+      "apiKeyInfo": "Your OpenAI API key is stored locally in your browser and is never sent to third parties.",
+      "dataProcessing": "Product data is sent to OpenAI for normalization. No personal data is collected or stored.",
+      "caching": "Extracted data is cached locally for 24 hours to avoid redundant API calls."
+    },
+    "messages": {
+      "saved": "Settings saved!",
+      "testSuccess": "Connection successful! API key is valid.",
+      "testError": "Connection failed: {{error}}",
+      "saveError": "Error saving settings: {{error}}",
+      "emptyKey": "Please enter an API key first."
+    }
+  },
+
+  "print": {
+    "printBtn": "Print",
+    "closeBtn": "Close",
+    "hint": "Tip: Select '100% scaling' in the print dialog for best results",
+    "cardLabels": {
+      "price": "Price:",
+      "quantity": "Quantity:",
+      "supplier": "Supplier:",
+      "min": "Min:",
+      "order": "Order:",
+      "safetyStock": "Safety Stock:",
+      "orderQuantity": "Order Quantity:",
+      "notes": "Notes:",
+      "qrCode": "QR code for product page"
+    }
+  },
+
+  "errors": {
+    "noTab": "No active tab found",
+    "invalidPage": "This extension does not work on Chrome internal pages. Please open a product page.",
+    "extractionFailed": "Could not extract product data. Make sure you are on a product detail page.",
+    "normalizationFailed": "Error processing data",
+    "apiKeyMissing": "OpenAI API key not configured. Please go to extension settings."
+  }
+}

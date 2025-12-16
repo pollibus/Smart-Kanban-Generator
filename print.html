@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="extensionName">Smart Kanban Generator</title>
+  <link rel="stylesheet" href="print.css">
+  <script src="i18n.js"></script>
+</head>
+<body>
+  <!-- Print controls (hidden when printing) -->
+  <div class="no-print controls">
+    <button id="printBtn" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+        <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/>
+      </svg>
+      Drucken
+    </button>
+    <button id="closeBtn" class="btn-secondary">Schließen</button>
+    <p class="hint">Tipp: Wähle im Druckdialog "100% Skalierung" für beste Ergebnisse</p>
+  </div>
+
+  <!-- Print Page Container -->
+  <div id="printContainer" class="print-container">
+    <!-- Cards will be inserted here by JavaScript -->
+  </div>
+
+  <!-- Card Templates -->
+  <template id="cardTemplateSmall">
+    <div class="kanban-card card-small">
+      <div class="card-header">
+        <h2 class="card-title"></h2>
+        <img class="card-image" alt="Produktbild">
+      </div>
+      <div class="card-body">
+        <div class="card-info">
+          <div class="info-row">
+            <span class="label">Preis:</span>
+            <span class="value price"></span>
+          </div>
+          <div class="info-row">
+            <span class="label">Menge:</span>
+            <span class="value quantity"></span>
+          </div>
+          <div class="info-row">
+            <span class="label">Lieferant:</span>
+            <span class="value supplier"></span>
+          </div>
+        </div>
+        <div class="card-qr"></div>
+      </div>
+      <div class="card-footer">
+        <div class="footer-item">
+          <span class="footer-label">Min:</span>
+          <span class="footer-value reorder"></span>
+        </div>
+        <div class="footer-item">
+          <span class="footer-label">Bestell:</span>
+          <span class="footer-value order"></span>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="cardTemplateMedium">
+    <div class="kanban-card card-medium">
+      <div class="card-header">
+        <h2 class="card-title"></h2>
+        <img class="card-image" alt="Produktbild">
+      </div>
+      <div class="card-body">
+        <div class="card-info">
+          <div class="info-row">
+            <span class="label">Preis:</span>
+            <span class="value price"></span>
+          </div>
+          <div class="info-row">
+            <span class="label">Menge:</span>
+            <span class="value quantity"></span>
+          </div>
+          <div class="info-row">
+            <span class="label">Lieferant:</span>
+            <span class="value supplier"></span>
+          </div>
+          <div class="info-row reorder-row">
+            <span class="label">Sicherheitsbestand:</span>
+            <span class="value reorder"></span>
+          </div>
+          <div class="info-row order-row">
+            <span class="label">Bestellmenge:</span>
+            <span class="value order"></span>
+          </div>
+        </div>
+        <div class="card-qr"></div>
+      </div>
+      <div class="card-footer">
+        <p class="notes"></p>
+      </div>
+    </div>
+  </template>
+
+  <template id="cardTemplateLarge">
+    <div class="kanban-card card-large">
+      <div class="card-header">
+        <div class="header-content">
+          <h2 class="card-title"></h2>
+          <div class="card-meta">
+            <div class="meta-item">
+              <span class="label">Preis:</span>
+              <span class="value price"></span>
+            </div>
+            <div class="meta-item">
+              <span class="label">Menge:</span>
+              <span class="value quantity"></span>
+            </div>
+          </div>
+        </div>
+        <img class="card-image" alt="Produktbild">
+      </div>
+      <div class="card-body">
+        <div class="card-info-large">
+          <div class="info-column">
+            <div class="info-group">
+              <span class="label">Lieferant</span>
+              <span class="value supplier"></span>
+            </div>
+            <div class="info-group">
+              <span class="label">Sicherheitsbestand</span>
+              <span class="value reorder"></span>
+            </div>
+            <div class="info-group">
+              <span class="label">Bestellmenge</span>
+              <span class="value order"></span>
+            </div>
+          </div>
+          <div class="card-qr"></div>
+        </div>
+        <div class="notes-section">
+          <span class="label">Notizen:</span>
+          <p class="notes"></p>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="cardTemplateA4">
+    <div class="kanban-card card-a4">
+      <div class="card-header-a4">
+        <div class="header-left">
+          <h1 class="card-title"></h1>
+          <div class="card-meta-a4">
+            <div class="meta-row">
+              <span class="label">Preis:</span>
+              <span class="value price"></span>
+            </div>
+            <div class="meta-row">
+              <span class="label">Menge/Einheit:</span>
+              <span class="value quantity"></span>
+            </div>
+            <div class="meta-row">
+              <span class="label">Lieferant:</span>
+              <span class="value supplier"></span>
+            </div>
+          </div>
+        </div>
+        <img class="card-image-a4" alt="Produktbild">
+      </div>
+      <div class="card-body-a4">
+        <div class="inventory-section">
+          <div class="inventory-item">
+            <span class="label">Sicherheitsbestand (Reorder Level)</span>
+            <span class="value reorder"></span>
+          </div>
+          <div class="inventory-item">
+            <span class="label">Bestellmenge (Order Quantity)</span>
+            <span class="value order"></span>
+          </div>
+        </div>
+        <div class="notes-section-a4">
+          <span class="label">Notizen / Bemerkungen:</span>
+          <p class="notes"></p>
+        </div>
+        <div class="qr-section">
+          <div class="card-qr"></div>
+          <p class="qr-label">QR-Code für Produktseite</p>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- QR Code Library -->
+  <script src="qrcode.min.js"></script>
+  <script src="print.js"></script>
+</body>
+</html>
